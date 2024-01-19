@@ -32,7 +32,7 @@ class WebsiteCrudController extends AbstractCrudController
             DateTimeField::new('created_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updated_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             TextField::new('license_key'),
-            TextEditorField::new('comments')
+            TextEditorField::new('comments')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
     

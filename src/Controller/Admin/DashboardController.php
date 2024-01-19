@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller\Admin;
-
+use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\License;
 use App\Entity\Website;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -54,21 +54,23 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::section('lorem Ipsum');
+        yield MenuItem::section('Dashboard', 'fas fa-tachometer-alt');
         
-        yield MenuItem::section('License');
+        yield MenuItem::section('License', 'fas fa-key');
 
         yield MenuItem::subMenu('Action', 'fas fa-bars')->setSubItems([
             MenuItem::linkToCrud('Add license', 'fas fa-plus', License::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('Show licenses', 'fas fa-eye', License::class)->setAction(Crud::PAGE_INDEX)
         ]);
 
-        yield MenuItem::section('Website');
+        yield MenuItem::section('Website', 'fas fa-globe');
 
         yield MenuItem::subMenu('Action', 'fas fa-bars')->setSubItems([
             MenuItem::linkToCrud('Add Website', 'fas fa-plus', Website::class)->setAction(Crud::PAGE_NEW),
             MenuItem::linkToCrud('Show Website', 'fas fa-eye', Website::class)->setAction(Crud::PAGE_INDEX)
         ]);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        yield MenuItem::section('Activity log', 'fas fa-history');
     }
+
 }
