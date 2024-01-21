@@ -1,0 +1,193 @@
+{# templates/admin/dashboard.html.twig #}
+
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <!-- Include Bootstrap CSS for responsiveness -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .chart-container {
+            background-color: #ffffff; /* Set your desired background color */
+            border-radius: 15px; /* Set the desired border radius */
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); /* Optional: add a subtle shadow */
+            padding: 20px; /* Add some padding around the chart */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h1 class="my-4">Dashboard</h1>
+
+        <!-- Row 1: Three square boxes -->
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="chart-container">
+                    <canvas id="chart1"width="250" height="250"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="chart-container">
+                    <canvas id="chart2"width="250" height="250"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="chart-container">
+                    <canvas id="chart3" width="250" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: One big rectangle and one square -->
+        <div class="row">
+            <div class="col-md-8 mb-4">
+                <div class="chart-container">
+                    <canvas id="chart4" width="250" height="250"></canvas>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="chart-container">
+                    <canvas id="chart5" width="250" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize your charts here
+
+        // Example of initializing one chart
+        // You can replicate this for other charts (chart2, chart3, etc.) with different configurations
+        const exampleChartData = {
+            labels: ['Licenses', 'Websites'],
+            datasets: [{
+                label: 'Counts',
+                data: [{{ licenseCount }}, {{ websiteCount }}], // Use your server-side data here
+                backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)'],
+            }]
+        };
+
+        const exampleChartConfig = {
+            type: 'bar',
+            data: exampleChartData,
+            options: {
+                maintainAspectRatio: false,
+            }
+        };
+
+        const exampleChart = new Chart(
+            document.getElementById('chart1'), // Change 'chart1' to the appropriate chart ID
+            exampleChartConfig
+        );
+
+        // Example Chart 2 - Line Chart
+        new Chart(document.getElementById('chart2'), {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'Sample Data',
+                    data: [65, 59, 80, 81, 56, 55, 40],
+                    fill: false,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+         // Example Chart 3 - Pie Chart
+        new Chart(document.getElementById('chart3'), {
+            type: 'pie',
+            data: {
+                datasets: [{
+                    label: 'Dataset 1',
+                    data: [300, 50, 100],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, 
+                aspectRatio: 1,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                    }
+                }
+            }
+        });
+        // Example Chart 4 - Doughnut Chart
+        new Chart(document.getElementById('chart4'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Purple', 'Orange', 'Green'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    data: [200, 150, 100],
+                    backgroundColor: [
+                        'rgb(128, 0, 128)',
+                        'rgb(255, 165, 0)',
+                        'rgb(0, 128, 0)'
+                    ]
+                }]
+            },
+            options: {
+                maintainAspectRatio: false, 
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+
+        // Example Chart 5 - Polar Area Chart
+        new Chart(document.getElementById('chart5'), {
+            type: 'polarArea',
+            data: {
+                labels: ['Pink', 'Teal', 'Lime'],
+                datasets: [{
+                    label: 'Dataset 1',
+                    data: [120, 90, 60],
+                    backgroundColor: [
+                        'rgb(255, 192, 203)',
+                        'rgb(0, 128, 128)',
+                        'rgb(50, 205, 50)'
+                    ]
+                }]
+            },
+            options: {
+                maintainAspectRatio: false, 
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Chart 5: Polar Area Chart Example'
+                    }
+                }
+            }
+        });
+    </script>
+{% endblock %}

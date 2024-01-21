@@ -14,38 +14,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    private $entityManager;
     public function __construct(
-        private AdminUrlGenerator $adminUrlGenerator
-    )
-    {
-        
-    }
-    #[Route('/admin', name: 'admin')]
-    public function index(): Response
-    {
-        $url = $this->adminUrlGenerator
-            ->setController(WebsiteCrudController::class)
-            ->generateUrl();
-        
-        return $this->redirect($url);
-
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirect('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        // return $this->render('some/path/my-dashboard.html.twig');
+        private AdminUrlGenerator $adminUrlGenerator,
+        EntityManagerInterface $entityManager
+    ){
+        $this->entityManager = $entityManager;
     }
 
+    #[Route('/', name: 'admin')]
+   public function index(): Response
+    {
+        // Example: Fetch some data for the dashboard
+        $licenseCount = $this->entityManager->getRepository(License::class)->count([]);
+        $websiteCount = $this->entityManager->getRepository(Website::class)->count([]);
+
+        // Render the custom dashboard template with the fetched data
+        return $this->render('admin/dashboard.html.twig', [
+            'licenseCount' => $licenseCount,
+            'websiteCount' => $websiteCount,
+        ]);
+    }
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
@@ -54,7 +43,7 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::section('Dashboard', 'fas fa-tachometer-alt');
+        yield MenuItem::linktoDashboard('Dashboard', 'fas fa-tachometer-alt');
         
         yield MenuItem::section('License', 'fas fa-key');
 
@@ -71,6 +60,17 @@ class DashboardController extends AbstractDashboardController
         ]);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
         yield MenuItem::section('Activity log', 'fas fa-history');
+    }
+    public function configureCrud(): Crud
+    {
+        return parent::configureCrud()
+            // Set the number of entities to display per page
+            ->setPaginatorPageSize(15)
+            // Set the range of pages to display around the current page
+            ->setPaginatorRangeSize(4)
+            // Other optional settings
+            ->setPaginatorUseOutputWalkers(true)
+            ->setPaginatorFetchJoinCollection(true);
     }
 
 }

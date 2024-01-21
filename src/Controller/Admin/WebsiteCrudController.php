@@ -3,6 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Website;
+
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
@@ -21,6 +23,14 @@ class WebsiteCrudController extends AbstractCrudController
         return Website::class;
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('name')
+            ->add('Start_Date')
+            ->add('end_date')
+        ;
+    }
     public function configureFields(string $pageName): iterable
     {
         return [

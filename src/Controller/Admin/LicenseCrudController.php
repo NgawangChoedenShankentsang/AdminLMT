@@ -15,6 +15,7 @@ class LicenseCrudController extends AbstractCrudController
         return License::class;
     }
 
+    
 
     public function configureFields(string $pageName): iterable
     {
