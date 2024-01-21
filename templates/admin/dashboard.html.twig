@@ -1,25 +1,33 @@
 {# templates/admin/dashboard.html.twig #}
-
-{% extends '@EasyAdmin/page/content.html.twig' %}
+{% extends '@EasyAdmin/layout.html.twig' %}
 
 {% block head_stylesheets %}
     {{ parent() }}
-    <!-- Include Bootstrap CSS for responsiveness -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <style>
-        .chart-container {
-            background-color: #ffffff; /* Set your desired background color */
-            border-radius: 15px; /* Set the desired border radius */
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1); /* Optional: add a subtle shadow */
-            padding: 20px; /* Add some padding around the chart */
+   <style>
+       :root [data-bs-theme=light]{
+            --chart-bg: #F2F2F2; 
         }
+        :root [data-bs-theme=dark]{
+            --chart-bg: #171717; 
+        }
+
+        .chart-container {
+            background-color: var(--chart-bg);
+            border-radius: 15px;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+        }
+        
     </style>
 {% endblock %}
+{% block content_title %}
+<h1 class="title">Dashboard</h1>
+{% endblock %}
 
-{% block content %}
+
+
+{% block main  %}
     <div class="container-fluid">
-        <h1 class="my-4">Dashboard</h1>
-
         <!-- Row 1: Three square boxes -->
         <div class="row">
             <div class="col-md-4 mb-4">
@@ -54,13 +62,10 @@
         </div>
     </div>
 
+
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Initialize your charts here
-
-        // Example of initializing one chart
-        // You can replicate this for other charts (chart2, chart3, etc.) with different configurations
         const exampleChartData = {
             labels: ['Licenses', 'Websites'],
             datasets: [{
@@ -183,11 +188,12 @@
                         position: 'bottom',
                     },
                     title: {
-                        display: true,
+                        display: false,
                         text: 'Chart 5: Polar Area Chart Example'
                     }
                 }
             }
         });
     </script>
-{% endblock %}
+{% endblock main %}
+

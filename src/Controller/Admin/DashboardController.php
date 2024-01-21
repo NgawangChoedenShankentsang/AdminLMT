@@ -11,6 +11,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -38,7 +39,14 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('LMT');
+        ->setTitle('<img src="logo/logo.svg" style="width: 70px;">ARTD <span style="font-size: 10px; vertical-align: super;">LMT</span>')
+        ->setFaviconPath('favicon/favicon.ico');
+    }
+
+    public function configureAssets(): Assets
+    {
+        return parent::configureAssets()
+            ->addCssFile('css/admin.css');
     }
 
     public function configureMenuItems(): iterable
