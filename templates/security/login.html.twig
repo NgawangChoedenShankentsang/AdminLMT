@@ -4,8 +4,13 @@
 {% endblock %}
 {% block stylesheets %}
 <style>
+	@font-face {
+		font-family: 'TT Interfaces';
+		src: url('./fonts/TTInterfaces-Light.woff2') format('woff2');
+	}
 	body {
     	background-color: #ffffff !important;
+		font-family: 'TT Interfaces', sans-serif;
 	}
 </style>
 {% endblock %}
@@ -43,7 +48,7 @@
 
 							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 							<div class="d-grid gap-2">
-								<button class="btn btn-primary btn-lg" type="submit">Sign in</button>
+								<button class="btn btn-lg" type="submit" style="background-color: #A8D45A">Sign in</button>
 							</div>
 						</form>
 
