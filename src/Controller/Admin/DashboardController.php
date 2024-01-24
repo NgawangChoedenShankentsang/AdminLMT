@@ -54,25 +54,12 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linktoDashboard('Dashboard', 'fas fa-tachometer-alt');
         
-        yield MenuItem::section('License', 'fas fa-key');
-
-        yield MenuItem::subMenu('Action', 'fas fa-bars')->setSubItems([
-            MenuItem::linkToCrud('Add license', 'fas fa-plus', Licenses::class)->setAction(Crud::PAGE_NEW),
-            MenuItem::linkToCrud('Show licenses', 'fas fa-eye', Licenses::class)->setAction(Crud::PAGE_INDEX)
-        ]);
-
-        yield MenuItem::section('Website', 'fas fa-globe');
-
-        yield MenuItem::subMenu('Action', 'fas fa-bars')->setSubItems([
-            MenuItem::linkToCrud('Add Website', 'fas fa-plus', Websites::class)->setAction(Crud::PAGE_NEW),
-            MenuItem::linkToCrud('Show Website', 'fas fa-eye', Websites::class)->setAction(Crud::PAGE_INDEX)
-        ]);
-        yield MenuItem::section('Product', 'fas fa-plug');
-
-        yield MenuItem::subMenu('Action', 'fas fa-bars')->setSubItems([
-            MenuItem::linkToCrud('Add Website', 'fas fa-plus', Products::class)->setAction(Crud::PAGE_NEW),
-            MenuItem::linkToCrud('Show Website', 'fas fa-eye', Products::class)->setAction(Crud::PAGE_INDEX)
-        ]);
+        yield MenuItem::section('Databases', 'fas fa-database');
+        
+        yield MenuItem::linkToCrud('Product', 'fas fa-plug', Products::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('License', 'fas fa-key', Licenses::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Website', 'fas fa-globe', Websites::class)->setAction(Crud::PAGE_INDEX);
+        
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
         yield MenuItem::section('Activity log', 'fas fa-history');
     }

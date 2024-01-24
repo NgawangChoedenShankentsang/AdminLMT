@@ -10,11 +10,13 @@
     --button-primary-bg: #A8D45A;
     --form-switch-checked-bg: #A8D45A;
     --button-primary-color: #242428;
+    --sidebar-menu-header-color: #0000008f;
 }
 :root [data-bs-theme=dark]{
     --button-primary-bg: #6f9c20;
     --form-switch-checked-bg: #6f9c20;
     --button-primary-color: #ffffff;
+    --sidebar-menu-header-color: #6f9c20;
 }
 @font-face {
     font-family: 'TT Interfaces';
@@ -24,4 +26,7 @@ body {
     font-family: 'TT Interfaces', sans-serif;
 }
 
-
+#main-menu .menu .menu-header {
+    font-style: italic !important;
+    margin-top: 30px !important;
+}

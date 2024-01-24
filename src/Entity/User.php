@@ -35,10 +35,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Licenses::class)]
     private Collection $licenses;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Websites::class)]
+    private Collection $websites;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->licenses = new ArrayCollection();
+        $this->websites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,5 +178,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->email;
+    }
+
+    /**
+     * @return Collection<int, Websites>
+     */
+    public function getWebsites(): Collection
+    {
+        return $this->websites;
+    }
+
+    public function addWebsite(Websites $website): static
+    {
+        if (!$this->websites->contains($website)) {
+            $this->websites->add($website);
+            $website->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWebsite(Websites $website): static
+    {
+        if ($this->websites->removeElement($website)) {
+            // set the owning side to null (unless already changed)
+            if ($website->getCreatedBy() === $this) {
+                $website->setCreatedBy(null);
+            }
+        }
+
+        return $this;
     }
 }

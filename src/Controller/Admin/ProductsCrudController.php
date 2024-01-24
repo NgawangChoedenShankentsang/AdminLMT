@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use Symfony\Component\Security\Core\Security;
 
 
 class ProductsCrudController extends AbstractCrudController
@@ -19,6 +20,15 @@ class ProductsCrudController extends AbstractCrudController
         return Products::class;
     }
 
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+    
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -26,7 +36,7 @@ class ProductsCrudController extends AbstractCrudController
             TextField::new('name'),
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy'),
+            AssociationField::new('createdBy')->hideOnForm(),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
@@ -34,6 +44,11 @@ class ProductsCrudController extends AbstractCrudController
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Products) return;
+        // Get the current user
+        $user = $this->security->getUser();
+
+        // Set the current user as createdBy
+        $entityInstance->setCreatedBy($user);
 
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);

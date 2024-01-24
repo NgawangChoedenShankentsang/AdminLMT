@@ -192,4 +192,8 @@ class Licenses
 
         return $this;
     }
+    public function __toString()
+    {
+        return $this->licenseKey ?? 'None';
+    }
 }
