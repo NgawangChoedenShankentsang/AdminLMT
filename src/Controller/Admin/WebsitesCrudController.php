@@ -11,12 +11,31 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use Symfony\Component\Security\Core\Security;
+
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class WebsitesCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Websites::class;
+    }
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+        ;
     }
 
     public function configureFilters(Filters $filters): Filters
@@ -34,13 +53,18 @@ class WebsitesCrudController extends AbstractCrudController
             AssociationField::new('licenseId', 'Licenses'),
             DateTimeField::new('created_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updated_at')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy'),
+            AssociationField::new('createdBy')->hideOnForm(),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Websites) return;
+        // Get the current user
+        $user = $this->security->getUser();
+
+        // Set the current user as createdBy
+        $entityInstance->setCreatedBy($user);
 
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);

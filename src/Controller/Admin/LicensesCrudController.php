@@ -12,6 +12,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use Symfony\Component\Security\Core\Security;
+
 
 class LicensesCrudController extends AbstractCrudController
 {
@@ -28,6 +30,13 @@ class LicensesCrudController extends AbstractCrudController
         ;
     }
 
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -36,7 +45,7 @@ class LicensesCrudController extends AbstractCrudController
             DateField::new('start_date'),
             DateField::new('end_date'),
             AssociationField::new('productId'),
-            AssociationField::new('createdBy'),
+            AssociationField::new('createdBy')->hideOnForm(),
             TextField::new('duration'),
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
@@ -46,6 +55,11 @@ class LicensesCrudController extends AbstractCrudController
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Licenses) return;
+        // Get the current user
+        $user = $this->security->getUser();
+
+        // Set the current user as createdBy
+        $entityInstance->setCreatedBy($user);
 
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
