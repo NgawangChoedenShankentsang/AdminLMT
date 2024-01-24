@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\Security\Core\Security;
+use App\Controller\Admin\ProductsCrudController;
 
 
 class LicensesCrudController extends AbstractCrudController
@@ -27,6 +28,7 @@ class LicensesCrudController extends AbstractCrudController
             ->add('licenseKey')
             ->add('startDate')
             ->add('endDate')
+            ->add('createdBy')
         ;
     }
 
@@ -44,7 +46,8 @@ class LicensesCrudController extends AbstractCrudController
             TextField::new('license_key'),
             DateField::new('start_date'),
             DateField::new('end_date'),
-            AssociationField::new('productId'),
+            AssociationField::new('productId', 'Product Name')
+                ->setCrudController(ProductsCrudController::class),
             AssociationField::new('createdBy')->hideOnForm(),
             TextField::new('duration'),
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
