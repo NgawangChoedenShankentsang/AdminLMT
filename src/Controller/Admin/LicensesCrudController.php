@@ -41,6 +41,7 @@ class LicensesCrudController extends AbstractCrudController
             ->add('createdBy')
             ->add('duration')
             ->add('productId')
+            ->add('paidBy')
         ;
     }
 
@@ -61,6 +62,7 @@ class LicensesCrudController extends AbstractCrudController
             DateField::new('start_date'),
             DateField::new('end_date'),
             AssociationField::new('duration'),
+            AssociationField::new('paidBy'),
             UrlField::new('url'),
             MoneyField::new('price')
                 ->setCurrency('CHF')->hideOnIndex(), 

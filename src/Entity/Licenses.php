@@ -55,6 +55,9 @@ class Licenses
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
+    #[ORM\ManyToOne(inversedBy: 'licenses')]
+    private ?paid $paidBy = null;
+
     public function __construct()
     {
         $this->websites = new ArrayCollection();
@@ -224,6 +227,18 @@ class Licenses
     public function setPrice(string $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getPaidBy(): ?paid
+    {
+        return $this->paidBy;
+    }
+
+    public function setPaidBy(?paid $paidBy): static
+    {
+        $this->paidBy = $paidBy;
 
         return $this;
     }
