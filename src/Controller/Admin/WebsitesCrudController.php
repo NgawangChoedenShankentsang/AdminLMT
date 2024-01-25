@@ -12,7 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\Security\Core\Security;
-
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -48,12 +48,16 @@ class WebsitesCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            FormField::addTab('Infos'),
+            FormField::addColumn(5),
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
             AssociationField::new('licenseId', 'Licenses'),
             DateTimeField::new('created_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updated_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             AssociationField::new('createdBy')->hideOnForm(),
+            FormField::addTab('Others'),
+            FormField::addColumn(5),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }

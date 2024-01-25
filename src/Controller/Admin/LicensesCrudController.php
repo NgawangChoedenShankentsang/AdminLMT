@@ -19,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 
 class LicensesCrudController extends AbstractCrudController
 {
@@ -55,17 +56,24 @@ class LicensesCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
+            FormField::addTab('Infos'),
+            FormField::addColumn(5),
             IdField::new('id')->hideOnForm(),
             TextField::new('license_key'),
             AssociationField::new('productId', 'Product Name')
                 ->setCrudController(ProductsCrudController::class),
-            DateField::new('start_date'),
-            DateField::new('end_date'),
-            AssociationField::new('duration'),
-            AssociationField::new('paidBy'),
-            UrlField::new('url'),
             MoneyField::new('price')
                 ->setCurrency('CHF')->hideOnIndex(), 
+            AssociationField::new('paidBy'),
+
+            FormField::addTab('Period'),
+            DateField::new('start_date')->setColumns(2),
+            DateField::new('end_date')->setColumns(2),
+            AssociationField::new('duration')->setColumns(4),
+            
+            FormField::addTab('Others'),
+            FormField::addColumn(5),
+            UrlField::new('url'),
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
