@@ -32,9 +32,6 @@ class Licenses
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $duration = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $notes = null;
 
     #[ORM\ManyToOne(inversedBy: 'licenses')]
@@ -47,6 +44,16 @@ class Licenses
     #[ORM\ManyToOne(inversedBy: 'licenses')]
     #[ORM\JoinColumn(nullable: false)]
     private ?user $createdBy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'licenses')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?duration $duration = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $url = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $price = null;
 
     public function __construct()
     {
@@ -117,19 +124,7 @@ class Licenses
 
         return $this;
     }
-
-    public function getDuration(): ?string
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(?string $duration): static
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
-
+    
     public function getNotes(): ?string
     {
         return $this->notes;
@@ -195,5 +190,41 @@ class Licenses
     public function __toString()
     {
         return $this->licenseKey ?? 'None';
+    }
+
+    public function getDuration(): ?duration
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?duration $duration): static
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): static
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(string $price): static
+    {
+        $this->price = $price;
+
+        return $this;
     }
 }

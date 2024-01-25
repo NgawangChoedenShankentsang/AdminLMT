@@ -14,13 +14,23 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\Security\Core\Security;
 use App\Controller\Admin\ProductsCrudController;
-
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 
 class LicensesCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Licenses::class;
+    }
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+        ;
     }
     public function configureFilters(Filters $filters): Filters
     {
@@ -29,6 +39,8 @@ class LicensesCrudController extends AbstractCrudController
             ->add('startDate')
             ->add('endDate')
             ->add('createdBy')
+            ->add('duration')
+            ->add('productId')
         ;
     }
 
@@ -44,14 +56,17 @@ class LicensesCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('license_key'),
-            DateField::new('start_date'),
-            DateField::new('end_date'),
             AssociationField::new('productId', 'Product Name')
                 ->setCrudController(ProductsCrudController::class),
-            AssociationField::new('createdBy')->hideOnForm(),
-            TextField::new('duration'),
+            DateField::new('start_date'),
+            DateField::new('end_date'),
+            AssociationField::new('duration'),
+            UrlField::new('url'),
+            MoneyField::new('price')
+                ->setCurrency('CHF')->hideOnIndex(), 
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
+            AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }

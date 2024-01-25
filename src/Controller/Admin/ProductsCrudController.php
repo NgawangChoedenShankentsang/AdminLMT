@@ -51,7 +51,7 @@ class ProductsCrudController extends AbstractCrudController
             TextField::new('name'),
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy')->hideOnForm(),
+            AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
@@ -76,8 +76,13 @@ class ProductsCrudController extends AbstractCrudController
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Products) return;
-        $entityInstance->setUpdatedAt(new \DateTimeImmutable);
+        // Get the current user
+        $user = $this->security->getUser();
 
+        // Set the current user as createdBy
+        $entityInstance->setCreatedBy($user);
+        $entityInstance->setUpdatedAt(new \DateTimeImmutable);
+        
         parent::updateEntity($entityManager, $entityInstance);
     }
 
