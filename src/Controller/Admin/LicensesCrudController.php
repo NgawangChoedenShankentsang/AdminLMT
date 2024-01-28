@@ -20,6 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 
 class LicensesCrudController extends AbstractCrudController
 {
@@ -29,9 +30,13 @@ class LicensesCrudController extends AbstractCrudController
     }
     public function configureActions(Actions $actions): Actions
     {
+        $deleteLicense = Action::new('deleteLicense', 'Delete')
+            ->linkToCrudAction('deleteLicense');
+    
         return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-        ;
+            ->add(Crud::PAGE_INDEX, $deleteLicense)
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
     public function configureFilters(Filters $filters): Filters
     {
@@ -52,13 +57,13 @@ class LicensesCrudController extends AbstractCrudController
     {
         $this->security = $security;
     }
-
+    
     public function configureFields(string $pageName): iterable
     {
         return [
             FormField::addTab('Infos'),
             FormField::addColumn(5),
-            IdField::new('id')->hideOnForm(),
+            IdField::new('id')->hideOnForm()->hideOnIndex(),
             TextField::new('license_key'),
             AssociationField::new('productId', 'Product Name')
                 ->setCrudController(ProductsCrudController::class),
@@ -73,12 +78,23 @@ class LicensesCrudController extends AbstractCrudController
             
             FormField::addTab('Others'),
             FormField::addColumn(5),
-            UrlField::new('url'),
+            UrlField::new('url')->hideOnIndex(),
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
+    }
+    public function deleteLicense(AdminContext $context, EntityManagerInterface $entityManager)
+    {
+        $license = $context->getEntity()->getInstance();
+
+        $entityManager->remove($license);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'License deleted successfully.');
+
+        return $this->redirect($context->getReferrer());
     }
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
@@ -92,7 +108,7 @@ class LicensesCrudController extends AbstractCrudController
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
         $entityInstance->setUpdatedAt($now);  // Set the updatedAt field as well
-
+        $this->addFlash('success', 'License created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
@@ -101,7 +117,7 @@ class LicensesCrudController extends AbstractCrudController
     {
         if (!$entityInstance instanceof Licenses) return;
         $entityInstance->setUpdatedAt(new \DateTimeImmutable);
-
+        $this->addFlash('success', 'License updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
     

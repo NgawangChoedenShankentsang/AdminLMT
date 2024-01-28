@@ -16,6 +16,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 
 class WebsitesCrudController extends AbstractCrudController
 {
@@ -33,9 +34,13 @@ class WebsitesCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $deleteWebsite = Action::new('deleteWebsite', 'Delete')
+            ->linkToCrudAction('deleteWebsite');
+
         return $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-        ;
+            ->add(Crud::PAGE_INDEX, $deleteWebsite)
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
     }
 
     public function configureFilters(Filters $filters): Filters
@@ -43,6 +48,7 @@ class WebsitesCrudController extends AbstractCrudController
         return $filters
             ->add('name')
             ->add('createdBy')
+            ->add('licenseId')
         ;
     }
     public function configureFields(string $pageName): iterable
@@ -55,12 +61,24 @@ class WebsitesCrudController extends AbstractCrudController
             AssociationField::new('licenseId', 'Licenses'),
             DateTimeField::new('created_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updated_at')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy')->hideOnForm(),
+            AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
             FormField::addTab('Others'),
             FormField::addColumn(5),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
+    public function deleteWebsite(AdminContext $context, EntityManagerInterface $entityManager)
+    {
+        $website = $context->getEntity()->getInstance();
+
+        $entityManager->remove($website);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Website deleted successfully.');
+
+        return $this->redirect($context->getReferrer());
+    }
+
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Websites) return;
@@ -73,7 +91,7 @@ class WebsitesCrudController extends AbstractCrudController
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
         $entityInstance->setUpdatedAt($now);  // Set the updatedAt field as well
-
+        $this->addFlash('success', 'Product created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
@@ -81,8 +99,13 @@ class WebsitesCrudController extends AbstractCrudController
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof Websites) return;
-        $entityInstance->setUpdatedAt(new \DateTimeImmutable);
+        // Get the current user
+        $user = $this->security->getUser();
 
+        // Set the current user as createdBy
+        $entityInstance->setCreatedBy($user);
+        $entityInstance->setUpdatedAt(new \DateTimeImmutable);
+        $this->addFlash('success', 'Product updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
 }

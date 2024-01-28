@@ -47,7 +47,7 @@ class Licenses
 
     #[ORM\ManyToOne(inversedBy: 'licenses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?duration $duration = null;
+    private ?Duration $duration = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $url = null;
@@ -56,7 +56,7 @@ class Licenses
     private ?string $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'licenses')]
-    private ?paid $paidBy = null;
+    private ?Paid $paidBy = null;
 
     public function __construct()
     {
@@ -195,12 +195,12 @@ class Licenses
         return $this->licenseKey ?? 'None';
     }
 
-    public function getDuration(): ?duration
+    public function getDuration(): ?Duration
     {
         return $this->duration;
     }
 
-    public function setDuration(?duration $duration): static
+    public function setDuration(?Duration $duration): static
     {
         $this->duration = $duration;
 
@@ -231,12 +231,12 @@ class Licenses
         return $this;
     }
 
-    public function getPaidBy(): ?paid
+    public function getPaidBy(): ?Paid
     {
         return $this->paidBy;
     }
 
-    public function setPaidBy(?paid $paidBy): static
+    public function setPaidBy(?Paid $paidBy): static
     {
         $this->paidBy = $paidBy;
 
