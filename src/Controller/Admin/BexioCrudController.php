@@ -2,39 +2,44 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Licenses;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use App\Entity\Bexio;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use Symfony\Component\Security\Core\Security;
-use App\Controller\Admin\ProductsCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 
-class LicensesCrudController extends AbstractCrudController
+class BexioCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
-        return Licenses::class;
+        return Bexio::class;
     }
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     public function configureActions(Actions $actions): Actions
     {
-        $deleteLicense = Action::new('deleteLicense', 'Delete')
-            ->linkToCrudAction('deleteLicense');
-    
+        $deleteBexio = Action::new('deleteBexio', 'Delete')
+            ->linkToCrudAction('deleteBexio');
         return $actions
-            ->add(Crud::PAGE_INDEX, $deleteLicense)
+            ->add(Crud::PAGE_INDEX, $deleteBexio)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
@@ -44,63 +49,47 @@ class LicensesCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add('licenseKey')
-            ->add('startDate')
-            ->add('endDate')
-            ->add('duration')
-            ->add('productId')
-            ->add('paidBy')
-            ->add('websites')
+            ->add('accountId')
+            ->add('accountName')
         ;
     }
-
-    private $security;
-
-    public function __construct(Security $security)
+    public function deleteBexio(AdminContext $context, EntityManagerInterface $entityManager)
     {
-        $this->security = $security;
+        $product = $context->getEntity()->getInstance();
+
+        // Replace 'getLicenses' with the actual method in your Product entity to retrieve linked licenses
+        if (count($product->getWebsites()) > 0) {
+            $this->addFlash('warning', 'Cannot delete a Bexio that is linked to Website.');
+        } else {
+            $entityManager->remove($product);
+            $entityManager->flush();
+            $this->addFlash('success', 'Bexio deleted successfully.');
+        }
+
+        return $this->redirect($context->getReferrer());
     }
-    
+
     public function configureFields(string $pageName): iterable
     {
         return [
             FormField::addTab('Infos'),
             FormField::addColumn(5),
-            TextField::new('license_key'),
-            AssociationField::new('productId', 'Product Name')
-                ->setCrudController(ProductsCrudController::class),
-            AssociationField::new('websites', 'Websites'),
-            MoneyField::new('price')
-                ->setCurrency('CHF')->hideOnIndex(), 
-            AssociationField::new('paidBy'),
-            FormField::addTab('Period'),
-            DateField::new('start_date')->setColumns(2),
-            DateField::new('end_date')->setColumns(2),
-            AssociationField::new('duration')->setColumns(4),
-            
-            FormField::addTab('Others'),
-            FormField::addColumn(5),
+            TextField::new('accountId', 'Account ID'),
+            TextField::new('accountName'),
             UrlField::new('url')->hideOnIndex(),
-            DateTimeField::new('createdAt')->hideOnIndex()->hideOnForm()->setTimezone('Europe/Zurich'),
+            
+            DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
+            FormField::addTab('Others'),
+            FormField::addColumn(5),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
-    public function deleteLicense(AdminContext $context, EntityManagerInterface $entityManager)
-    {
-        $license = $context->getEntity()->getInstance();
 
-        $entityManager->remove($license);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'License deleted successfully.');
-
-        return $this->redirect($context->getReferrer());
-    }
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if (!$entityInstance instanceof Licenses) return;
+        if (!$entityInstance instanceof bexio) return;
         // Get the current user
         $user = $this->security->getUser();
 
@@ -110,18 +99,29 @@ class LicensesCrudController extends AbstractCrudController
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
         $entityInstance->setUpdatedAt($now);  // Set the updatedAt field as well
-        $this->addFlash('success', 'License created successfully.');
+        $this->addFlash('success', 'Bexio created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if (!$entityInstance instanceof Licenses) return;
+        if (!$entityInstance instanceof bexio) return;
         $entityInstance->setUpdatedAt(new \DateTimeImmutable);
-        $this->addFlash('success', 'License updated successfully.');
+        $this->addFlash('success', 'Bexio updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
     
    
+
+    /*
+    public function configureFields(string $pageName): iterable
+    {
+        return [
+            IdField::new('id'),
+            TextField::new('title'),
+            TextEditorField::new('description'),
+        ];
+    }
+    */
 }

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Controller\Admin;
+
+use App\Entity\Bexio;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Licenses;
 use App\Entity\Websites;
@@ -50,6 +52,7 @@ class DashboardController extends AbstractDashboardController
             ->addCssFile('css/admin.css');
     }
 
+    
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linktoDashboard('Dashboard', 'fas fa-tachometer-alt');
@@ -57,9 +60,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Databases', 'fas fa-database');
         
         yield MenuItem::linkToCrud('Product', 'fas fa-plug', Products::class)->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkToCrud('License', 'fas fa-key', Licenses::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('Bexio', 'fas fa-address-book', bexio::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Website', 'fas fa-globe', Websites::class)->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('License', 'fas fa-key', Licenses::class)->setAction(Crud::PAGE_INDEX);
         
+        
+
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
         yield MenuItem::section('Activity log', 'fas fa-history');
     }
@@ -67,7 +73,7 @@ class DashboardController extends AbstractDashboardController
     {
         return parent::configureCrud()
             // Set the number of entities to display per page
-            ->setPaginatorPageSize(15)
+            ->setPaginatorPageSize(2)
             // Set the range of pages to display around the current page
             ->setPaginatorRangeSize(4)
             // Other optional settings

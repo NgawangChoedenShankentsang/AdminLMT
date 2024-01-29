@@ -38,11 +38,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Websites::class)]
     private Collection $websites;
 
+    #[ORM\OneToMany(mappedBy: 'createdBy', targetEntity: Bexio::class)]
+    private Collection $bexios;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->licenses = new ArrayCollection();
         $this->websites = new ArrayCollection();
+        $this->bexios = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -204,6 +208,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($website->getCreatedBy() === $this) {
                 $website->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Bexio>
+     */
+    public function getBexios(): Collection
+    {
+        return $this->bexios;
+    }
+
+    public function addBexio(Bexio $bexio): static
+    {
+        if (!$this->bexios->contains($bexio)) {
+            $this->bexios->add($bexio);
+            $bexio->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBexio(Bexio $bexio): static
+    {
+        if ($this->bexios->removeElement($bexio)) {
+            // set the owning side to null (unless already changed)
+            if ($bexio->getCreatedBy() === $this) {
+                $bexio->setCreatedBy(null);
             }
         }
 

@@ -28,12 +28,15 @@ class Websites
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\ManyToMany(targetEntity: licenses::class, inversedBy: 'websites')]
+    #[ORM\ManyToMany(targetEntity: licenses::class, mappedBy: 'websites')]
     private Collection $licenseId;
 
     #[ORM\ManyToOne(inversedBy: 'websites')]
     #[ORM\JoinColumn(nullable: false)]
     private ?user $createdBy = null;
+
+    #[ORM\ManyToOne(inversedBy: 'websites')]
+    private ?bexio $bexio = null;
 
     public function __construct()
     {
@@ -127,5 +130,21 @@ class Websites
         $this->createdBy = $createdBy;
 
         return $this;
+    }
+
+    public function getBexio(): ?bexio
+    {
+        return $this->bexio;
+    }
+
+    public function setBexio(?bexio $bexio): static
+    {
+        $this->bexio = $bexio;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        return $this->name;
     }
 }

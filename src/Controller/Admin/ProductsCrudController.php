@@ -40,14 +40,15 @@ class ProductsCrudController extends AbstractCrudController
         return $actions
             ->add(Crud::PAGE_INDEX, $deleteProduct)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
-        ;
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fas fa-plus')->setLabel(false);
+            });
     }
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
             ->add('name')
-            ->add('createdBy')
         ;
     }
     
@@ -74,7 +75,6 @@ class ProductsCrudController extends AbstractCrudController
         return [
             FormField::addTab('Infos'),
             FormField::addColumn(5),
-            IdField::new('id')->hideOnForm(),
             TextField::new('name'),
             DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),

@@ -38,7 +38,7 @@ class Licenses
     #[ORM\JoinColumn(nullable: false)]
     private ?products $productId = null;
 
-    #[ORM\ManyToMany(targetEntity: Websites::class, mappedBy: 'licenseId')]
+    #[ORM\ManyToMany(targetEntity: Websites::class, inversedBy: 'licenseId')]
     private Collection $websites;
 
     #[ORM\ManyToOne(inversedBy: 'licenses')]

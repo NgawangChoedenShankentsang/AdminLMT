@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Websites;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use App\Controller\Admin\BexioCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,15 +41,17 @@ class WebsitesCrudController extends AbstractCrudController
         return $actions
             ->add(Crud::PAGE_INDEX, $deleteWebsite)
             ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->update(Crud::PAGE_INDEX, Action::NEW, function (Action $action) {
+                return $action->setIcon('fas fa-plus')->setLabel(false);
+            });
     }
 
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
             ->add('name')
-            ->add('createdBy')
-            ->add('licenseId')
+            ->add('bexio')
         ;
     }
     public function configureFields(string $pageName): iterable
@@ -56,9 +59,9 @@ class WebsitesCrudController extends AbstractCrudController
         return [
             FormField::addTab('Infos'),
             FormField::addColumn(5),
-            IdField::new('id')->hideOnForm(),
             TextField::new('name'),
-            AssociationField::new('licenseId', 'Licenses'),
+            AssociationField::new('bexio', 'Bexio Account Nr.')
+            ->setCrudController(BexioCrudController::class),
             DateTimeField::new('created_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             DateTimeField::new('updated_at')->hideOnForm()->setTimezone('Europe/Zurich'),
             AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
@@ -91,7 +94,7 @@ class WebsitesCrudController extends AbstractCrudController
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
         $entityInstance->setUpdatedAt($now);  // Set the updatedAt field as well
-        $this->addFlash('success', 'Product created successfully.');
+        $this->addFlash('success', 'Website created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
@@ -105,7 +108,7 @@ class WebsitesCrudController extends AbstractCrudController
         // Set the current user as createdBy
         $entityInstance->setCreatedBy($user);
         $entityInstance->setUpdatedAt(new \DateTimeImmutable);
-        $this->addFlash('success', 'Product updated successfully.');
+        $this->addFlash('success', 'Website updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
 }
