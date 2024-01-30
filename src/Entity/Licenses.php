@@ -52,7 +52,7 @@ class Licenses
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $url = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    #[ORM\Column(type: Types::DECIMAL, precision:10, scale:2)]
     private ?string $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'licenses')]
