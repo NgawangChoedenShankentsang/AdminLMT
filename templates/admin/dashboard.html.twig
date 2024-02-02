@@ -18,6 +18,12 @@
             padding: 20px;
             height: 100%;
         }
+        .dashboard-shortcut-btn {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            margin: 5px 10px; /* Adjust margins as needed */
+        }
         
     </style>
 {% endblock %}
@@ -45,12 +51,12 @@
                 <div class="chart-container">
                     
                     <!-- Shortcut Links -->
-                    <div class="d-flex flex-column align-items-stretch justify-content-center h-100">
-                        <h3>Add</h3>
-                        <a href="{{ createUrlForProduct }}" class="btn btn-primary mb-2 text-wrap" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">Product</a>
-                        <a href="{{ createUrlForLicense }}" class="btn btn-primary mb-2" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">License</a>
-                        <a href="{{ createUrlForWebsite }}" class="btn btn-primary mb-2" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">Website</a>
-                        <a href="{{ createUrlForBexio }}" class="btn btn-primary mb-2" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">Bexio</a>
+                    <div class="d-flex flex-column align-items-stretch justify-content-center h-100 px-3">
+                        <h3 class="text-center mb-4">Add New</h3>
+                        <a href="{{ createUrlForProduct }}" class="btn btn-primary mb-3 dashboard-shortcut-btn">Product</a>
+                        <a href="{{ createUrlForLicense }}" class="btn btn-primary mb-3 dashboard-shortcut-btn">License</a>
+                        <a href="{{ createUrlForWebsite }}" class="btn btn-primary mb-3 dashboard-shortcut-btn">Website</a>
+                        <a href="{{ createUrlForBexio }}" class="btn btn-primary mb-3 dashboard-shortcut-btn">Bexio</a>
                     </div>
                 </div>
             </div>
