@@ -16,6 +16,7 @@
             border-radius: 15px;
             box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
             padding: 20px;
+            height: 100%;
         }
         
     </style>
@@ -42,7 +43,15 @@
             </div>
             <div class="col-md-4 mb-4">
                 <div class="chart-container">
-                    <canvas id="chart3" width="250" height="250"></canvas>
+                    
+                    <!-- Shortcut Links -->
+                    <div class="d-flex flex-column align-items-stretch justify-content-center h-100">
+                        <h3>Add</h3>
+                        <a href="{{ createUrlForProduct }}" class="btn btn-primary mb-2 text-wrap" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">Product</a>
+                        <a href="{{ createUrlForLicense }}" class="btn btn-primary mb-2" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">License</a>
+                        <a href="{{ createUrlForWebsite }}" class="btn btn-primary mb-2" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">Website</a>
+                        <a href="{{ createUrlForBexio }}" class="btn btn-primary mb-2" style="margin: 5px 10px; line-height: 20px; border-radius: 5px;">Bexio</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -111,34 +120,7 @@
             }
         });
          // Example Chart 3 - Pie Chart
-        new Chart(document.getElementById('chart3'), {
-            type: 'pie',
-            data: {
-                datasets: [{
-                    label: 'Dataset 1',
-                    data: [300, 50, 100],
-                    backgroundColor: [
-                        'rgb(255, 99, 132)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)'
-                    ],
-                    hoverOffset: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false, 
-                aspectRatio: 1,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                    }
-                }
-            }
-        });
+        
         // Example Chart 4 - Doughnut Chart
         new Chart(document.getElementById('chart4'), {
             type: 'doughnut',

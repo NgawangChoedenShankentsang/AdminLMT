@@ -33,10 +33,33 @@ class DashboardController extends AbstractDashboardController
         $licenseCount = $this->entityManager->getRepository(Licenses::class)->count([]);
         $websiteCount = $this->entityManager->getRepository(Websites::class)->count([]);
 
-        // Render the custom dashboard template with the fetched data
+        $createUrlForProduct = $this->adminUrlGenerator
+            ->setController(ProductsCrudController::class)
+            ->setAction(Crud::PAGE_NEW)
+            ->generateUrl();
+
+        $createUrlForLicense = $this->adminUrlGenerator
+            ->setController(LicensesCrudController::class)
+            ->setAction(Crud::PAGE_NEW)
+            ->generateUrl();
+
+        $createUrlForWebsite = $this->adminUrlGenerator
+            ->setController(WebsitesCrudController::class)
+            ->setAction(Crud::PAGE_NEW)
+            ->generateUrl();
+
+        $createUrlForBexio = $this->adminUrlGenerator
+            ->setController(BexioCrudController::class)
+            ->setAction(Crud::PAGE_NEW)
+            ->generateUrl();
+        
         return $this->render('admin/dashboard.html.twig', [
             'licenseCount' => $licenseCount,
             'websiteCount' => $websiteCount,
+            'createUrlForProduct' => $createUrlForProduct,
+            'createUrlForLicense' => $createUrlForLicense,
+            'createUrlForWebsite' => $createUrlForWebsite,
+            'createUrlForBexio' => $createUrlForBexio,
         ]);
     }
     public function configureDashboard(): Dashboard
