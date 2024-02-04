@@ -67,6 +67,7 @@ class LicensesCrudController extends AbstractCrudController
             FormField::addTab('Infos'),
             FormField::addColumn(5),
             TextField::new('license_key'),
+            TextField::new('creditVia'),
             AssociationField::new('productId', 'Product Name')
                 ->setCrudController(ProductsCrudController::class),
             AssociationField::new('websites', 'Websites'),

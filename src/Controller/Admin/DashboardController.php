@@ -96,9 +96,9 @@ class DashboardController extends AbstractDashboardController
     {
         return parent::configureCrud()
             // Set the number of entities to display per page
-            ->setPaginatorPageSize(15)
+            ->setPaginatorPageSize(2)
             // Set the range of pages to display around the current page
-            ->setPaginatorRangeSize(4)
+            ->setPaginatorRangeSize(1)
             // Other optional settings
             ->setPaginatorUseOutputWalkers(true)
             ->setPaginatorFetchJoinCollection(true);

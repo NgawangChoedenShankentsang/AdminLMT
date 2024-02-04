@@ -58,6 +58,9 @@ class Licenses
     #[ORM\ManyToOne(inversedBy: 'licenses')]
     private ?Paid $paidBy = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $creditVia = null;
+
     public function __construct()
     {
         $this->websites = new ArrayCollection();
@@ -239,6 +242,18 @@ class Licenses
     public function setPaidBy(?Paid $paidBy): static
     {
         $this->paidBy = $paidBy;
+
+        return $this;
+    }
+
+    public function getCreditVia(): ?string
+    {
+        return $this->creditVia;
+    }
+
+    public function setCreditVia(string $creditVia): static
+    {
+        $this->creditVia = $creditVia;
 
         return $this;
     }
