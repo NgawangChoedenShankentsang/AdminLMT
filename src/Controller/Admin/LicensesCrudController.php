@@ -70,7 +70,8 @@ class LicensesCrudController extends AbstractCrudController
             TextField::new('creditVia'),
             AssociationField::new('productId', 'Product Name')
                 ->setCrudController(ProductsCrudController::class),
-            AssociationField::new('websites', 'Websites'),
+            AssociationField::new('websites', 'Websites')
+                ->setTemplatePath('admin/field/websites.html.twig'),
             MoneyField::new('price')
                 ->setCurrency('CHF')->hideOnIndex(), 
             AssociationField::new('paidBy'),

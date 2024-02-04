@@ -1,0 +1,15 @@
+{% for websites in field.value %}
+  {%- set url = ea_url()
+    .setController('App\\Controller\\Admin\\WebsitesCrudController')
+    .setAction('detail')
+    .setEntityId(websites.id)
+  -%}
+  <a href="{{ url }}" class="badge badge-secondary">
+    {{ websites.name }}{% if not loop.last %}{% endif %}
+  </a>
+{% else %}  
+  <span class="badge badge-secondary">None</span>
+{% endfor %}
+
+
+
