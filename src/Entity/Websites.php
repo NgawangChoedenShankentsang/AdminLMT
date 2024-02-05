@@ -38,6 +38,9 @@ class Websites
     #[ORM\ManyToOne(inversedBy: 'websites')]
     private ?bexio $bexio = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $url = null;
+
     public function __construct()
     {
         $this->licenseId = new ArrayCollection();
@@ -146,5 +149,17 @@ class Websites
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getUrl(): ?string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(?string $url): static
+    {
+        $this->url = $url;
+
+        return $this;
     }
 }

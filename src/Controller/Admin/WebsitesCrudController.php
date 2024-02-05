@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Websites;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use App\Controller\Admin\BexioCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -67,6 +67,7 @@ class WebsitesCrudController extends AbstractCrudController
             AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
             FormField::addTab('Others'),
             FormField::addColumn(5),
+            UrlField::new('url')->hideOnIndex(),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }

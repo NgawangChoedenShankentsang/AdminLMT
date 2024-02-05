@@ -61,6 +61,9 @@ class Licenses
     #[ORM\Column(length: 255)]
     private ?string $creditVia = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $autoRenewal = null;
+
     public function __construct()
     {
         $this->websites = new ArrayCollection();
@@ -254,6 +257,18 @@ class Licenses
     public function setCreditVia(string $creditVia): static
     {
         $this->creditVia = $creditVia;
+
+        return $this;
+    }
+
+    public function isAutoRenewal(): ?bool
+    {
+        return $this->autoRenewal;
+    }
+
+    public function setAutoRenewal(?bool $autoRenewal): static
+    {
+        $this->autoRenewal = $autoRenewal;
 
         return $this;
     }
