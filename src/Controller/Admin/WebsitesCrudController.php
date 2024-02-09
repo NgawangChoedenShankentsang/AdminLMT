@@ -59,7 +59,8 @@ class WebsitesCrudController extends AbstractCrudController
         return [
             FormField::addTab('Infos'),
             FormField::addColumn(5),
-            TextField::new('name'),
+            TextField::new('name')
+            ->setTemplatePath('admin/field/name_link.html.twig'),
             AssociationField::new('bexio', 'Bexio Account Nr.')
             ->setCrudController(BexioCrudController::class),
             DateTimeField::new('created_at')->hideOnForm()->setTimezone('Europe/Zurich'),

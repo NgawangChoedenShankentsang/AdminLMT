@@ -1,0 +1,8 @@
+{# templates/admin/field/custom_name_field.html.twig #}
+<a href="{{ ea_url()
+    .setController('App\\Controller\\Admin\\WebsitesCrudController')
+    .setAction('detail')
+    .setEntityId(entity.primaryKeyValue)
+    .generateUrl() }}">
+    {{ entity.instance.name }}
+</a>
