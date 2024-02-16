@@ -69,9 +69,16 @@ class LicensesCrudController extends AbstractCrudController
         // Customizing the field based on the page
         if ($pageName === Crud::PAGE_INDEX) {
             $autoRenewalField = $autoRenewalField
-                ->renderAsSwitch(false) // This renders the boolean as a non-interactive switch
-                ->setFormTypeOption('disabled', true); // This makes it non-editable (but still visible)
+                ->renderAsSwitch(false) 
+                ->setFormTypeOption('disabled', true); 
         }
+
+        $startDateField = DateField::new('start_date')
+            ->setTemplatePath('admin/field/start_date_badge.html.twig')
+            ->setColumns(2);
+        $endDateField = DateField::new('end_date')
+            ->setTemplatePath('admin/field/end_date_highlight.html.twig')
+            ->setColumns(2);
 
     
         return [
@@ -87,8 +94,8 @@ class LicensesCrudController extends AbstractCrudController
                 ->setCurrency('CHF')->hideOnIndex(), 
             AssociationField::new('paidBy'),
             FormField::addTab('Period'),
-            DateField::new('start_date')->setColumns(2),
-            DateField::new('end_date')->setColumns(2),
+            $startDateField,
+            $endDateField,
             $autoRenewalField,
             AssociationField::new('duration')->setColumns(4),
             

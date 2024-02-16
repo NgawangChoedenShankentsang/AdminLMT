@@ -35,3 +35,18 @@ body {
     font-style: italic !important;
     margin-top: 30px !important;
 }
+
+/* assets/styles/admin.css */
+.urgent {
+    color: red;
+    font-weight: bold;
+}
+.warning {
+    color: orange;
+}
+.soon {
+    color: blue;
+}
+.normal {
+    color: black;
+}
