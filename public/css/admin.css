@@ -13,6 +13,8 @@
     --sidebar-menu-header-color: #0000008f;
     --pagination-active-bg: #A8D45A;
     --pagination-active-color: #242428;
+    --badge-boolean-true-bg: #A8D45A;
+    --badge-boolean-true-color: #000000;
 }
 :root [data-bs-theme=dark]{
     --button-primary-bg: #6f9c20;
