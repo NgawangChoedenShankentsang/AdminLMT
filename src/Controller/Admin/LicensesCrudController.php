@@ -63,6 +63,17 @@ class LicensesCrudController extends AbstractCrudController
     
     public function configureFields(string $pageName): iterable
     {
+        // Common field configuration that applies to all pages
+        $autoRenewalField = BooleanField::new('auto_renewal', 'Auto Renewal');
+
+        // Customizing the field based on the page
+        if ($pageName === Crud::PAGE_INDEX) {
+            $autoRenewalField = $autoRenewalField
+                ->renderAsSwitch(false) // This renders the boolean as a non-interactive switch
+                ->setFormTypeOption('disabled', true); // This makes it non-editable (but still visible)
+        }
+
+    
         return [
             FormField::addTab('Infos'),
             FormField::addColumn(5),
@@ -78,7 +89,7 @@ class LicensesCrudController extends AbstractCrudController
             FormField::addTab('Period'),
             DateField::new('start_date')->setColumns(2),
             DateField::new('end_date')->setColumns(2),
-            BooleanField::new('auto_renewal'),
+            $autoRenewalField,
             AssociationField::new('duration')->setColumns(4),
             
             FormField::addTab('Others'),
