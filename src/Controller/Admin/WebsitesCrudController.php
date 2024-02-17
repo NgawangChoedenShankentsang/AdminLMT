@@ -60,16 +60,26 @@ class WebsitesCrudController extends AbstractCrudController
             FormField::addTab('Infos'),
             FormField::addColumn(5),
             TextField::new('name')
-            ->setTemplatePath('admin/field/name_link.html.twig'),
+                ->setTemplatePath('admin/field/name_link.html.twig'),
             AssociationField::new('bexio', 'Bexio Account Nr.')
-            ->setCrudController(BexioCrudController::class),
-            DateTimeField::new('created_at')->hideOnForm()->setTimezone('Europe/Zurich'),
-            DateTimeField::new('updated_at')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
+                ->setCrudController(BexioCrudController::class)
+                ->setSortable(false),
+            DateTimeField::new('createdAt')
+                ->hideOnForm()
+                ->hideOnIndex()
+                ->setTimezone('Europe/Zurich'),
+            DateTimeField::new('updatedAt')
+                ->hideOnForm()
+                ->setTimezone('Europe/Zurich'),
+            AssociationField::new('createdBy', 'Last edit')
+                ->hideOnForm()
+                ->setSortable(false),
             FormField::addTab('Others'),
             FormField::addColumn(5),
-            UrlField::new('url')->hideOnIndex(),
-            TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
+            UrlField::new('url')
+                ->hideOnIndex(),
+            TextEditorField::new('notes')
+                ->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
     public function deleteWebsite(AdminContext $context, EntityManagerInterface $entityManager)

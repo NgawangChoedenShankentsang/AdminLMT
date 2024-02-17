@@ -76,12 +76,21 @@ class ProductsCrudController extends AbstractCrudController
             FormField::addTab('Infos'),
             FormField::addColumn(5),
             TextField::new('name'),
-            DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
-            DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
+            DateTimeField::new('createdAt')
+                ->hideOnForm()
+                ->hideOnIndex()
+                ->setTimezone('Europe/Zurich')
+                ->setSortable(true),
+            DateTimeField::new('updatedAt')
+                ->hideOnForm()
+                ->setTimezone('Europe/Zurich'),
+            AssociationField::new('createdBy', 'Last edit')
+                ->hideOnForm()
+                ->setSortable(false),
             FormField::addTab('Others'),
             FormField::addColumn(5),
-            TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
+            TextEditorField::new('notes')
+                ->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
     

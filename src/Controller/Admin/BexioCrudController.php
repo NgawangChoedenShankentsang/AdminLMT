@@ -76,14 +76,22 @@ class BexioCrudController extends AbstractCrudController
             FormField::addColumn(5),
             TextField::new('accountId', 'Account ID'),
             TextField::new('accountName'),
-            UrlField::new('url')->hideOnIndex(),
-            
-            DateTimeField::new('createdAt')->hideOnForm()->setTimezone('Europe/Zurich'),
-            DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
+            UrlField::new('url')
+                ->hideOnIndex(),
+            DateTimeField::new('createdAt')
+                ->hideOnForm()
+                ->hideOnIndex()
+                ->setTimezone('Europe/Zurich'),
+            DateTimeField::new('updatedAt')
+                ->hideOnForm()
+                ->setTimezone('Europe/Zurich'),
+            AssociationField::new('createdBy', 'Last edit')
+                ->hideOnForm()
+                ->setSortable(false),
             FormField::addTab('Others'),
             FormField::addColumn(5),
-            TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
+            TextEditorField::new('notes')
+                ->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
 

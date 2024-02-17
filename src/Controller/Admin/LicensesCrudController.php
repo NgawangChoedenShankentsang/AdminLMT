@@ -64,7 +64,7 @@ class LicensesCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         // Common field configuration that applies to all pages
-        $autoRenewalField = BooleanField::new('auto_renewal', 'Auto Renewal');
+        $autoRenewalField = BooleanField::new('autoRenewal', 'Auto Renewal');
 
         // Customizing the field based on the page
         if ($pageName === Crud::PAGE_INDEX) {
@@ -73,10 +73,10 @@ class LicensesCrudController extends AbstractCrudController
                 ->setFormTypeOption('disabled', true); 
         }
 
-        $startDateField = DateField::new('start_date')
+        $startDateField = DateField::new('startDate')
             ->setTemplatePath('admin/field/start_date_badge.html.twig')
             ->setColumns(2);
-        $endDateField = DateField::new('end_date')
+        $endDateField = DateField::new('endDate')
             ->setTemplatePath('admin/field/end_date_highlight.html.twig')
             ->setColumns(2);
 
@@ -84,10 +84,11 @@ class LicensesCrudController extends AbstractCrudController
         return [
             FormField::addTab('Infos'),
             FormField::addColumn(5),
-            TextField::new('license_key'),
+            TextField::new('licenseKey'),
             TextField::new('creditVia'),
             AssociationField::new('productId', 'Product Name')
-                ->setCrudController(ProductsCrudController::class),
+                ->setCrudController(ProductsCrudController::class)
+                ->setSortable(false),
             AssociationField::new('websites', 'Websites')
                 ->setTemplatePath('admin/field/websites.html.twig'),
             MoneyField::new('price')
