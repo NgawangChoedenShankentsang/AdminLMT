@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Licenses;
 use App\Entity\Websites;
 use App\Entity\Products;
+use App\Entity\Paid;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -52,7 +53,7 @@ class DashboardController extends AbstractDashboardController
             ->setController(BexioCrudController::class)
             ->setAction(Crud::PAGE_NEW)
             ->generateUrl();
-        
+        $totals = $this->calculateLicenseTotals();
         return $this->render('admin/dashboard.html.twig', [
             'licenseCount' => $licenseCount,
             'websiteCount' => $websiteCount,
@@ -60,6 +61,8 @@ class DashboardController extends AbstractDashboardController
             'createUrlForLicense' => $createUrlForLicense,
             'createUrlForWebsite' => $createUrlForWebsite,
             'createUrlForBexio' => $createUrlForBexio,
+            'totalByArtd' => $totals['totalByArtd'], // Use the totals here
+            'totalByOthers' => $totals['totalByOthers'],
         ]);
     }
     public function configureDashboard(): Dashboard
@@ -103,5 +106,35 @@ class DashboardController extends AbstractDashboardController
             ->setPaginatorUseOutputWalkers(true)
             ->setPaginatorFetchJoinCollection(true);
     }
+
+    public function calculateLicenseTotals()
+    {
+        $licenseRepository = $this->entityManager->getRepository(Licenses::class);
+        $paidByArtd = $this->entityManager->getRepository(Paid::class)->findOneBy(['name' => 'ARTD']);
+        $totalByArtd = 0;
+        $totalByOthers = 0;
+
+        if ($paidByArtd) {
+            $totalByArtd = $licenseRepository->createQueryBuilder('l')
+                ->select('SUM(l.price) / 100') // Divide by 100 here
+                ->where('l.paidBy = :paidByArtd')
+                ->setParameter('paidByArtd', $paidByArtd)
+                ->getQuery()
+                ->getSingleScalarResult();
+                
+            $totalByOthers = $licenseRepository->createQueryBuilder('l')
+                ->select('SUM(l.price) / 100') // And here
+                ->where('l.paidBy != :paidByArtd OR l.paidBy IS NULL')
+                ->setParameter('paidByArtd', $paidByArtd)
+                ->getQuery()
+                ->getSingleScalarResult();
+        }
+
+        return [
+            'totalByArtd' => number_format($totalByArtd, 2),
+            'totalByOthers' => number_format($totalByOthers, 2),
+        ];
+    }
+
 
 }
