@@ -92,20 +92,31 @@ class LicensesCrudController extends AbstractCrudController
             AssociationField::new('websites', 'Websites')
                 ->setTemplatePath('admin/field/websites.html.twig'),
             MoneyField::new('price')
-                ->setCurrency('CHF')->hideOnIndex(), 
+                ->setCurrency('CHF')
+                ->hideOnIndex(), 
             AssociationField::new('paidBy'),
             FormField::addTab('Period'),
             $startDateField,
             $endDateField,
             $autoRenewalField,
-            AssociationField::new('duration')->setColumns(4),
+            AssociationField::new('duration'
+                )->setColumns(4),
             
             FormField::addTab('Others'),
             FormField::addColumn(5),
-            UrlField::new('url')->hideOnIndex(),
-            DateTimeField::new('createdAt')->hideOnIndex()->hideOnForm()->setTimezone('Europe/Zurich'),
-            DateTimeField::new('updatedAt')->hideOnForm()->setTimezone('Europe/Zurich'),
-            AssociationField::new('createdBy', 'Last edit')->hideOnForm(),
+            UrlField::new('url')
+                ->hideOnIndex(),
+            DateTimeField::new('createdAt')
+                ->hideOnIndex()
+                ->hideOnForm()
+                ->setTimezone('Europe/Zurich')
+                ->setFormat('d MMM, Y, hh:mm:ss a'),
+            DateTimeField::new('updatedAt')
+                ->hideOnForm()
+                ->setTimezone('Europe/Zurich')
+                ->setFormat('d MMM, Y, hh:mm:ss a'),
+            AssociationField::new('createdBy', 'Last edit')
+                ->hideOnForm(),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }

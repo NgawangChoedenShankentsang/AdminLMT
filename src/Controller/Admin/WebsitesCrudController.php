@@ -67,10 +67,12 @@ class WebsitesCrudController extends AbstractCrudController
             DateTimeField::new('createdAt')
                 ->hideOnForm()
                 ->hideOnIndex()
-                ->setTimezone('Europe/Zurich'),
+                ->setTimezone('Europe/Zurich')
+                ->setFormat('d MMM, Y, hh:mm:ss a'),
             DateTimeField::new('updatedAt')
                 ->hideOnForm()
-                ->setTimezone('Europe/Zurich'),
+                ->setTimezone('Europe/Zurich')
+                ->setFormat('d MMM, Y, hh:mm:ss a'),
             AssociationField::new('createdBy', 'Last edit')
                 ->hideOnForm()
                 ->setSortable(false),

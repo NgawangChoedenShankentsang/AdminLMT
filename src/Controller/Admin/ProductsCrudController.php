@@ -80,10 +80,12 @@ class ProductsCrudController extends AbstractCrudController
                 ->hideOnForm()
                 ->hideOnIndex()
                 ->setTimezone('Europe/Zurich')
-                ->setSortable(true),
+                ->setSortable(true)
+                ->setFormat('d MMM, Y, hh:mm:ss a'),
             DateTimeField::new('updatedAt')
                 ->hideOnForm()
-                ->setTimezone('Europe/Zurich'),
+                ->setTimezone('Europe/Zurich')
+                ->setFormat('d MMM, Y, hh:mm:ss a'),
             AssociationField::new('createdBy', 'Last edit')
                 ->hideOnForm()
                 ->setSortable(false),
