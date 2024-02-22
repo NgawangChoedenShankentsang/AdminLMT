@@ -1,11 +1,16 @@
 {# templates/admin/field/end_date_highlight.html.twig #}
 {% set today = date('now') %}
 {% set end_date = field.value %}
-{% set days_until_end = (end_date.diff(today)).days %}
+{% set interval = end_date.diff(today) %}
+{% set days_until_end = interval.days %}
+{% set is_past = end_date < today %}
 
 {% set class = 'badge badge-secondary' %} {# Default badge class #}
 {% set title = 'Normal - More than 30 days' %}
-{% if days_until_end <= 1 %}
+{% if is_past %}
+    {% set class = 'badge badge-danger' %}
+    {% set title = 'Expired - Renewal Past Due' %}
+{% elseif days_until_end <= 1 %}
     {% set class = 'badge badge-danger' %}
     {% set title = 'Urgent - Renew Now' %}
 {% elseif days_until_end <= 5 %}
