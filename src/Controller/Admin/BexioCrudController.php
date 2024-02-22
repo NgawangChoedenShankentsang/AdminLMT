@@ -117,6 +117,11 @@ class BexioCrudController extends AbstractCrudController
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
         if (!$entityInstance instanceof bexio) return;
+        // Get the current user
+        $user = $this->security->getUser();
+
+        // Set the current user as createdBy
+        $entityInstance->setCreatedBy($user);
         $entityInstance->setUpdatedAt(new \DateTimeImmutable);
         $this->addFlash('success', 'Bexio updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
