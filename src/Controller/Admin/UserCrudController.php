@@ -57,21 +57,46 @@ class UserCrudController extends AbstractCrudController
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if ($entityInstance instanceof User && !empty($entityInstance->getPassword())) {
-            $entityInstance->setPassword(
-                $this->passwordHasher->hashPassword($entityInstance, $entityInstance->getPassword())
-            );
+        if ($entityInstance instanceof User) {
+            // Check if email is unique
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $entityInstance->getEmail()]);
+            
+            if ($existingUser) {
+                // Add flash message
+                $this->addFlash('danger', '<i class="fa fa-exclamation-triangle"></i> The email is already in use.');
+                return; // Exit without persisting
+            }
+            
+            if (!empty($entityInstance->getPassword())) {
+                $entityInstance->setPassword(
+                    $this->passwordHasher->hashPassword($entityInstance, $entityInstance->getPassword())
+                );
+            }
         }
+        
         parent::persistEntity($entityManager, $entityInstance);
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
-        if ($entityInstance instanceof User && !empty($entityInstance->getPassword())) {
-            $entityInstance->setPassword(
-                $this->passwordHasher->hashPassword($entityInstance, $entityInstance->getPassword())
-            );
+        if ($entityInstance instanceof User) {
+            // Check if email is unique, excluding the current user
+            $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $entityInstance->getEmail()]);
+            
+            if ($existingUser && $existingUser->getId() !== $entityInstance->getId()) {
+                // Add flash message
+                $this->addFlash('danger', '<i class="fa fa-exclamation-triangle"></i> The email is already in use.');
+                return; // Exit without updating
+            }
+            
+            if (!empty($entityInstance->getPassword())) {
+                $entityInstance->setPassword(
+                    $this->passwordHasher->hashPassword($entityInstance, $entityInstance->getPassword())
+                );
+            }
         }
+        
         parent::updateEntity($entityManager, $entityInstance);
     }
+
 }
