@@ -8,6 +8,7 @@ use App\Entity\Licenses;
 use App\Entity\Websites;
 use App\Entity\Products;
 use App\Entity\Paid;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -89,11 +90,13 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Bexio', 'fas fa-address-book', bexio::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Website', 'fas fa-globe', Websites::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('License', 'fas fa-key', Licenses::class)->setAction(Crud::PAGE_INDEX);
-        
-        
 
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
-        yield MenuItem::section('Activity log', 'fas fa-history');
+       
+
+
+        yield MenuItem::section('Setting', 'fa fa-cog')->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Users', 'fa fa-user-plus', User::class)->setPermission('ROLE_ADMIN')->setAction(Crud::PAGE_INDEX);
     }
     public function configureCrud(): Crud
     {
