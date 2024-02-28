@@ -58,11 +58,11 @@ class ProductsCrudController extends AbstractCrudController
 
         // Replace 'getLicenses' with the actual method in your Product entity to retrieve linked licenses
         if (count($product->getLicenses()) > 0) {
-            $this->addFlash('warning', 'Cannot delete a product that is linked to licenses.');
+            $this->addFlash('danger', '<i class="fa-solid fa-circle-exclamation"></i> Cannot delete a product that is linked to licenses.');
         } else {
             $entityManager->remove($product);
             $entityManager->flush();
-            $this->addFlash('success', 'Product deleted successfully.');
+            $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> Product deleted successfully.');
         }
 
         return $this->redirect($context->getReferrer());
@@ -108,7 +108,7 @@ class ProductsCrudController extends AbstractCrudController
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
         $entityInstance->setUpdatedAt($now);  // Set the updatedAt field as well
-        $this->addFlash('success', 'Product created successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> Product created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
@@ -122,7 +122,7 @@ class ProductsCrudController extends AbstractCrudController
         // Set the current user as createdBy
         $entityInstance->setCreatedBy($user);
         $entityInstance->setUpdatedAt(new \DateTimeImmutable);
-        $this->addFlash('success', 'Product updated successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> Product updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
 

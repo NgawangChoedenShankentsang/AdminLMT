@@ -63,7 +63,7 @@ class UserCrudController extends AbstractCrudController
             
             if ($existingUser) {
                 // Add flash message
-                $this->addFlash('danger', '<i class="fa fa-exclamation-triangle"></i> The email is already in use.');
+                $this->addFlash('danger', '<i class="fa-solid fa-circle-exclamation"></i> The email is already in use.');
                 return; // Exit without persisting
             }
             
@@ -73,7 +73,7 @@ class UserCrudController extends AbstractCrudController
                 );
             }
         }
-        
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> The user is created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
@@ -85,7 +85,7 @@ class UserCrudController extends AbstractCrudController
             
             if ($existingUser && $existingUser->getId() !== $entityInstance->getId()) {
                 // Add flash message
-                $this->addFlash('danger', '<i class="fa fa-exclamation-triangle"></i> The email is already in use.');
+                $this->addFlash('danger', '<i class="fa-solid fa-circle-exclamation"></i></i> The email is already in use.');
                 return; // Exit without updating
             }
             
@@ -95,7 +95,7 @@ class UserCrudController extends AbstractCrudController
                 );
             }
         }
-        
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> The user is updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
 

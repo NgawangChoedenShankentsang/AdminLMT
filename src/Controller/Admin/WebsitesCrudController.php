@@ -91,7 +91,7 @@ class WebsitesCrudController extends AbstractCrudController
         $entityManager->remove($website);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Website deleted successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> Website deleted successfully.');
 
         return $this->redirect($context->getReferrer());
     }
@@ -108,7 +108,7 @@ class WebsitesCrudController extends AbstractCrudController
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
         $entityInstance->setUpdatedAt($now);  // Set the updatedAt field as well
-        $this->addFlash('success', 'Website created successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> Website created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
@@ -122,7 +122,7 @@ class WebsitesCrudController extends AbstractCrudController
         // Set the current user as createdBy
         $entityInstance->setCreatedBy($user);
         $entityInstance->setUpdatedAt(new \DateTimeImmutable);
-        $this->addFlash('success', 'Website updated successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> Website updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
 }

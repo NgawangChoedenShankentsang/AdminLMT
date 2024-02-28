@@ -116,7 +116,8 @@ class LicensesCrudController extends AbstractCrudController
                 ->setTimezone('Europe/Zurich')
                 ->setFormat('d MMM, Y, hh:mm:ss a'),
             AssociationField::new('createdBy', 'Last edit')
-                ->hideOnForm(),
+                ->hideOnForm()
+                ->setSortable(false),
             TextEditorField::new('notes')->setTemplatePath('admin/field/text_editor.html.twig')
         ];
     }
@@ -127,7 +128,7 @@ class LicensesCrudController extends AbstractCrudController
         $entityManager->remove($license);
         $entityManager->flush();
 
-        $this->addFlash('success', 'License deleted successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> License deleted successfully.');
 
         return $this->redirect($context->getReferrer());
     }
@@ -143,7 +144,7 @@ class LicensesCrudController extends AbstractCrudController
         $now = new \DateTimeImmutable();
         $entityInstance->setCreatedAt($now);
         $entityInstance->setUpdatedAt($now);  // Set the updatedAt field as well
-        $this->addFlash('success', 'License created successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> License created successfully.');
         parent::persistEntity($entityManager, $entityInstance);
     }
 
@@ -157,7 +158,7 @@ class LicensesCrudController extends AbstractCrudController
         // Set the current user as createdBy
         $entityInstance->setCreatedBy($user);
         $entityInstance->setUpdatedAt(new \DateTimeImmutable);
-        $this->addFlash('success', 'License updated successfully.');
+        $this->addFlash('success', '<i class="fa-solid fa-circle-check"></i> License updated successfully.');
         parent::updateEntity($entityManager, $entityInstance);
     }
     
