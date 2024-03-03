@@ -21,6 +21,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 
 class LicensesCrudController extends AbstractCrudController
 {
@@ -106,6 +107,9 @@ class LicensesCrudController extends AbstractCrudController
             FormField::addColumn(5),
             UrlField::new('url')
                 ->hideOnIndex(),
+            ImageField::new('invoices', 'Invoice')
+                ->setBasePath('uploads/images')
+                ->setUploadDir('public/uploads/images'),
             DateTimeField::new('createdAt')
                 ->hideOnIndex()
                 ->hideOnForm()

@@ -64,6 +64,9 @@ class Licenses
     #[ORM\Column(nullable: true)]
     private ?bool $autoRenewal = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $invoices = null;
+
     public function __construct()
     {
         $this->websites = new ArrayCollection();
@@ -269,6 +272,18 @@ class Licenses
     public function setAutoRenewal(?bool $autoRenewal): static
     {
         $this->autoRenewal = $autoRenewal;
+
+        return $this;
+    }
+
+    public function getInvoices(): ?string
+    {
+        return $this->invoices;
+    }
+
+    public function setInvoices(?string $invoices): static
+    {
+        $this->invoices = $invoices;
 
         return $this;
     }
