@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+{% block stylesheets %}
+<style>
+	@font-face {
+		font-family: 'TT Interfaces';
+		src: url('./fonts/TTInterfaces-Light.woff2') format('woff2');
+	}
+	body {
+    	background-color: #ffffff !important;
+		font-family: 'TT Interfaces', sans-serif;
+	}
+</style>
+{% endblock %}
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                {% for flash_error in app.flashes('reset_password_error') %}
+                    <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+                {% endfor %}
+                
+                <div class="card-header">
+                    <h3 class="mb-0">Reset your password</h3>
+                </div>
+                <div class="card-body">
+                    {{ form_start(requestForm, {'attr': {'class': 'mb-3'}}) }}
+                        {{ form_row(requestForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Email', 'autocomplete': 'email', 'required': 'required', 'autofocus': 'autofocus'}}) }}
+                        <div>
+                            <small>
+                                Enter your email address, and we will send you a
+                                link to reset your password.
+                            </small>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-lg" type="submit" style="background-color: #A8D45A">Reset</button>
+                        </div>
+                    {{ form_end(requestForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
