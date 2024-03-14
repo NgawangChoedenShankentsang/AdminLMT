@@ -17,7 +17,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
-
+use Svc\TotpBundle\Controller\MfaCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Config\UserMenu;
+use Symfony\Component\Security\Core\User\UserInterface;
 class DashboardController extends AbstractDashboardController
 {
     private $entityManager;
@@ -85,18 +87,19 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linktoDashboard('Dashboard', 'fas fa-tachometer-alt');
         
         yield MenuItem::section('Databases', 'fas fa-database');
-        
         yield MenuItem::linkToCrud('Product', 'fas fa-plug', Products::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Bexio', 'fas fa-address-book', bexio::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('Website', 'fas fa-globe', Websites::class)->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkToCrud('License', 'fas fa-key', Licenses::class)->setAction(Crud::PAGE_INDEX);
 
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+        
        
 
 
         yield MenuItem::section('Setting', 'fa fa-cog')->setPermission('ROLE_ADMIN');
         yield MenuItem::linkToCrud('Users', 'fa fa-user-plus', User::class)->setPermission('ROLE_ADMIN')->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkToCrud('MFA', 'fas fa-users', User::class)->setController(MfaCrudController::class)->setPermission('ROLE_ADMIN');
     }
     public function configureCrud(): Crud
     {
@@ -137,6 +140,18 @@ class DashboardController extends AbstractDashboardController
             'totalByArtd' => number_format($totalByArtd, 2),
             'totalByOthers' => number_format($totalByOthers, 2),
         ];
+    }public function configureUserMenu(UserInterface $user): UserMenu
+    {
+        // Usually it's better to call the parent method because that gives you a
+        // user menu with some menu items already created ("sign out", "exit impersonation", etc.)
+        // if you prefer to create the user menu from scratch, use: return UserMenu::new()->...
+        return parent::configureUserMenu($user)
+
+            // you can use any type of menu item, except submenus
+            ->addMenuItems([
+                MenuItem::linkToRoute('Manage 2FA', 'fa-solid fa-shield', 'svc_totp_manage', ['reset' => true]),
+                MenuItem::linkToRoute('Clear trusted devices', 'fa-solid fa-folder-minus', 'svc_totp_cleartd', ['allUsers' => true]),
+            ]);
     }
 
 

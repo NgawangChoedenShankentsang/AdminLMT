@@ -1,0 +1,4 @@
+#config/routes/svc_totp.yaml
+_svc_totp:
+    resource: '@SvcTotpBundle/config/routes.yaml'
+    prefix: /mfa/{_locale}
