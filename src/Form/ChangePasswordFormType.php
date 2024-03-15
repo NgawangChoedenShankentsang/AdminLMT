@@ -24,6 +24,9 @@ class ChangePasswordFormType extends AbstractType
                     ],
                 ],
                 'first_options' => [
+                    'toggle' => true,
+                    'button_classes' => ['input-group-text'],
+                    'toggle_container_classes' => ['input-group'],
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Please enter a password',
@@ -39,6 +42,9 @@ class ChangePasswordFormType extends AbstractType
                     'row_attr' => ['class' => 'mb-3'],
                 ],
                 'second_options' => [
+                    'toggle' => true,
+                    'button_classes' => ['input-group-text'],
+                    'toggle_container_classes' => ['input-group'],
                     'label' => 'Repeat Password',
                     'label_attr' => ['class' => 'form-label'], 
                     'row_attr' => ['class' => 'mb-3'],

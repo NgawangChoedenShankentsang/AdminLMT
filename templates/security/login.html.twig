@@ -42,8 +42,15 @@
 							</div>
 							<div class="mb-3">
 								<label for="inputPassword" class="form-label">Password</label>
-								<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="Password" required>
+								<div class="input-group">
+									<input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" placeholder="Password" required>
+									<span class="input-group-text" id="togglePassword" style="cursor: pointer;">
+										<i class="fas fa-eye-slash"></i>
+									</span>
+								</div>
 							</div>
+
+
 
 							<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 							<div class="d-grid gap-2">
@@ -60,3 +67,25 @@
 		</div>
 	</div>
 {% endblock %}
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#inputPassword');
+
+    togglePassword.addEventListener('click', function (e) {
+        // Check if the password is currently hidden
+        const isPasswordHidden = passwordInput.getAttribute('type') === 'password';
+        
+        // Toggle the type attribute
+        passwordInput.setAttribute('type', isPasswordHidden ? 'text' : 'password');
+        
+        // Toggle the icon
+        this.querySelector('i').classList.toggle('fa-eye-slash', isPasswordHidden);
+        this.querySelector('i').classList.toggle('fa-eye', !isPasswordHidden);
+    });
+});
+</script>
+{% endblock %}
+
+
